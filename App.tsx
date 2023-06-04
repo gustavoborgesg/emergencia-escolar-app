@@ -1,20 +1,32 @@
+import React from "react";
+import { StyleSheet, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import GlobalStyles from './assets/styles/GlobalStyles';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function App() {
+import AppTabView from './src/screens/AppTabView';
+import Emergency from './src/screens/AppTabs/Emergency';
+import Report from './src/screens/AppTabs/Report';
+import Protocols from './src/screens/AppTabs/Protocols';
+const Stack = createNativeStackNavigator();
+
+const App = () => {
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
+      <StatusBar style="auto" networkActivityIndicatorVisible animated translucent />
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='Emergency'>
+          <Stack.Screen options={{ headerShown: false }} name="AppTabView" component={AppTabView} />
+          <Stack.Screen options={{ headerShown: false }} name="Emergency" component={Emergency} />
+          <Stack.Screen options={{ headerShown: false }} name="Report" component={Report} />
+          <Stack.Screen options={{ headerShown: false }} name="Protocols" component={Protocols} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
+
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
