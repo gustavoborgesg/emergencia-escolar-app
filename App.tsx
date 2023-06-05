@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import GlobalStyles from './assets/styles/GlobalStyles';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,10 +14,10 @@ const Stack = createNativeStackNavigator();
 const App = () => {
 
   return (
-    <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
-      <StatusBar style="auto" networkActivityIndicatorVisible animated translucent />
+    <SafeAreaView style={GlobalStyles.SafeArea}>
+      <StatusBar style="auto" networkActivityIndicatorVisible animated translucent backgroundColor="lightblue" />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='Emergency'>
+        <Stack.Navigator initialRouteName='AppTabView'>
           <Stack.Screen options={{ headerShown: false }} name="AppTabView" component={AppTabView} />
           <Stack.Screen options={{ headerShown: false }} name="Emergency" component={Emergency} />
           <Stack.Screen options={{ headerShown: false }} name="Report" component={Report} />

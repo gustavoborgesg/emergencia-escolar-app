@@ -4,11 +4,13 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import Emergency from './AppTabs/Emergency';
 import Report from './AppTabs/Report';
 import Protocols from './AppTabs/Protocols';
+import About from './AppTabs/About';
 
 const renderScene = SceneMap({
   first: Emergency,
   second: Report,
   third: Protocols,
+  //fourth: About,
 });
 
 export default function AppTabView() {
@@ -19,6 +21,7 @@ export default function AppTabView() {
     { key: 'first', title: 'Emergência' },
     { key: 'second', title: 'Denúncia' },
     { key: 'third', title: 'Protocolos' },
+    //{ key: 'fourth', title: 'Sobre' },
   ]);
 
   return (
