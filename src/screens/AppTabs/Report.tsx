@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, View, Text, TouchableOpacity, TextInput, Keyboard } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, TouchableOpacity, TextInput, Keyboard, ScrollView } from 'react-native';
 import GlobalStyles from '../../../assets/styles/GlobalStyles';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/Colors';
@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 import * as Location from 'expo-location';
 import CustomTextInput from '../../components/CustomTextInput';
 import CustomButton from '../../components/CustomButton';
+import * as DocumentPicker from 'expo-document-picker';
 
 export default function Report() {
 
@@ -96,10 +97,10 @@ export default function Report() {
     setErrors(prevState => ({ ...prevState, [input]: error }));
   };
 
-  const [bodyText, setBodyText] = useState();
-  const [files, setFiles] = useState();
+  const [bodyText, setBodyText] = useState("");
+  const [files, setFiles]: any = useState(null);
 
-  const handleOnchange = (text: any) => {
+  const handleOnChange = (text: any) => {
     setBodyText(text);
   };
 
@@ -118,48 +119,83 @@ export default function Report() {
     }
 
     if (isValid) {
-
+      //manda para o servidor
     }
   }
 
+  const selectFiles = async () => {
+    try {
+      const files = await DocumentPicker.getDocumentAsync({});
+      setFiles(files);
+      console.log(files);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const clean = () => {
+    setBodyText("");
+    setFiles(null);
+  }
+
   return (
-    <View style={styles.Main}>
-      <Header />
-      <Text style={styles.Title}>REALIZAR DENÚNCIA</Text>
-      <Text style={styles.Subtitle}>Insira toda informação que possam ser relevantes...</Text>
-      <View style={styles.Form}>
-        <CustomTextInput
-          label={"Texto"}
-          placeholder={"Informações..."}
-          value={bodyText}
-          error={errors.bodyText}
-          onChangeText={(text: any) => handleOnchange(text)}
-          onFocus={[() => handleError(null, 'bodyText')]}
-          returnKeyType="next"
-        />
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%", marginTop: 30, }}>
+    <ScrollView contentContainerStyle={styles.Main}>
+      <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
+        <Header />
+        <Text style={styles.Title}>REALIZAR DENÚNCIA</Text>
+        <Text style={styles.Subtitle}>Insira toda informação que possam ser relevantes...</Text>
+        <View style={styles.Form}>
+          <CustomTextInput
+            label={"Texto"}
+            placeholder={"Informações..."}
+            value={bodyText}
+            error={errors.bodyText}
+            onChangeText={(text: any) => handleOnChange(text)}
+            onFocus={() => handleError(null, 'bodyText')}
+            returnKeyType="next"
+          />
           <CustomButton
-            text={"Enviar"}
+            text={files == null ? "Selecionar Arquivo 1" : files.name.length >= 20 ? files.name.substring(0, 17).concat("...") : files.name}
             textColor={Colors.primary}
             backgroundColor={Colors.white}
-            onPress={() => validate()}
+            onPress={() => selectFiles()}
           />
           <CustomButton
-            text={"Limpar"}
-            textColor={Colors.red}
+            text={files == null ? "Selecionar Arquivo 2" : files.name.length >= 20 ? files.name.substring(0, 17).concat("...") : files.name}
+            textColor={Colors.primary}
             backgroundColor={Colors.white}
-            onPress={() => validate()}
+            onPress={() => selectFiles()}
           />
+          <CustomButton
+            text={files == null ? "Selecionar Arquivo 3" : files.name.length >= 20 ? files.name.substring(0, 17).concat("...") : files.name}
+            textColor={Colors.primary}
+            backgroundColor={Colors.white}
+            onPress={() => selectFiles()}
+          />
+          <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", width: "80%" }}>
+            <CustomButton
+              text={"Enviar"}
+              textColor={Colors.green}
+              backgroundColor={Colors.white}
+              onPress={() => validate()}
+            />
+            <CustomButton
+              text={"Limpar"}
+              textColor={Colors.red}
+              backgroundColor={Colors.white}
+              onPress={() => clean()}
+            />
+          </View>
+          <Text style={styles.Warning}>Utilize apenas em casos reais de suspeita!</Text>
         </View>
-        <Text style={styles.Warning}>Utilize apenas em casos reais de suspeita!</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   Main: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: "2.5%",
     backgroundColor: Colors.background,
     alignItems: "center",
@@ -168,7 +204,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    //justifyContent: "center",
   },
   Title: {
     fontSize: 28,

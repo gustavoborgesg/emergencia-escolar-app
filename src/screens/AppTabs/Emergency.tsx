@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/Colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -52,17 +52,17 @@ export default function Emergency() {
       setIsPressed(true);
       intervalId = setInterval(() => {
         setBorderColor((prevColor) => (prevColor === Colors.details ? Colors.red : Colors.details));
-      }, 350);
+      }, 450);
       const id: any = setTimeout(async () => {
         if (Location.PermissionStatus.GRANTED) {
           clearInterval(intervalId);
           setIsPressedFinished(true);
-          
+
           let location: any = await Location.getCurrentPositionAsync({});
           let address: any = await Location.reverseGeocodeAsync(location.coords);
           setAddress(address);
           console.log(address);
-          
+
           showToastSuccess();
         }
         else {
@@ -85,7 +85,7 @@ export default function Emergency() {
   };
 
   return (
-    <View style={styles.Main}>
+    <ScrollView contentContainerStyle={styles.Main}>
       <Header />
       <Text style={styles.Title}>BOTÃO DE EMERGÊNCIA</Text>
       <Text style={styles.Subtitle}>Pressione e segure por 3 segundos para acionar...</Text>
@@ -101,7 +101,7 @@ export default function Emergency() {
         </TouchableOpacity>
         <Text style={styles.Warning}>Utilize apenas em casos reais de emergência escolar!</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
