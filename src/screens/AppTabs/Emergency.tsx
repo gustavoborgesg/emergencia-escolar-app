@@ -1,33 +1,81 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/Colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import Toast from 'react-native-toast-message';
+import * as Location from 'expo-location';
 
 export default function Emergency() {
 
-  const showToast = () => {
+  const [address, setAddress]: any = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== 'granted') {
+        showToastError
+        return;
+      }
+
+      await Location.enableNetworkProviderAsync();
+    })();
+  }, []);
+
+  const showToastSuccess = () => {
     Toast.show({
       type: 'success',
       text1: 'Pedido de Emergência',
-      text2: 'Chamado de emergência enviado às autoridades...'
+      text2: 'Chamado de emergência enviado às autoridades...',
+      visibilityTime: 6000,
+    });
+  }
+
+  const showToastError = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Falha ao obter localização',
+      text2: 'Favor permitir o acesso à sua localização para conseguir utilizar o app...',
+      visibilityTime: 6000,
     });
   }
 
   const [timeoutId, setTimeoutId]: any = useState(null);
+  const [isPressed, setIsPressed] = useState(false);
+  const [isPressedFinished, setIsPressedFinished] = useState(false);
+  const [borderColor, setBorderColor] = useState(Colors.details);
 
+  let intervalId: any;
   const handlePressIn = () => {
-    const id: any = setTimeout(() => {
-      // Ação acionada após 3 segundos de pressionamento contínuo
-      console.log('Ação acionada!');
-      showToast();
+    setIsPressed(true);
+    intervalId = setInterval(() => {
+      setBorderColor((prevColor) => (prevColor === Colors.details ? Colors.red : Colors.details));
+    }, 350);
+    const id: any = setTimeout(async () => {
+      if (Location.PermissionStatus.GRANTED) {
+        clearInterval(intervalId);
+        setIsPressedFinished(true);
+
+        let location: any = await Location.getCurrentPositionAsync({});
+        let address: any = await Location.reverseGeocodeAsync(location.coords);
+        setAddress(address);
+        console.log(address);
+
+        showToastSuccess();
+      }
+      else {
+        showToastError();
+      }
     }, 3000);
     setTimeoutId(id);
   };
 
   const handlePressOut = () => {
+    setIsPressed(false);
+    setIsPressedFinished(false);
     clearTimeout(timeoutId);
+    clearInterval(intervalId);
   };
 
   return (
@@ -37,8 +85,8 @@ export default function Emergency() {
       <Text style={styles.Subtitle}>Pressione e segure por 3 segundos para acionar...</Text>
       <View style={styles.Form}>
         <TouchableOpacity
-          style={styles.EmergencyButton}
-          activeOpacity={0.7}
+          style={[styles.EmergencyButton, isPressed && { borderColor: borderColor }, isPressedFinished && { borderColor: Colors.primary }]}
+          activeOpacity={0.5}
           onPressIn={handlePressIn}
           onPressOut={handlePressOut}
         >
@@ -96,6 +144,9 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderRadius: 300,
     overflow: 'hidden'
+  },
+  PressedEmergencyButton: {
+    borderColor: Colors.red,
   },
   EmergencyText: {
     color: Colors.red,
