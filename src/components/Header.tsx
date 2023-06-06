@@ -7,7 +7,7 @@ export default function Header() {
     <View style={styles.Main}>
       <Text style={styles.Text}>NomeApp/Icone</Text>
       <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }}>
-        <Feather name="info" size={20} color={Colors.details} />
+        <Feather name="info" size={20} color={Colors.primary} />
         <Text style={styles.Text}>Sobre</Text>
       </TouchableOpacity>
     </View>
@@ -22,12 +22,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     //alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomWidth: 0.2,
-    borderColor: Colors.primary,
+    borderBottomWidth: 0.8,
+    borderColor: Colors.details,
   },
   Text: {
-    color: Colors.details,
-    fontSize: 20,
+    color: Colors.primary,
+    fontSize: 18,
     marginLeft: 2,
   }
 });

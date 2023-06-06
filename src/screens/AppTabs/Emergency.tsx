@@ -48,27 +48,33 @@ export default function Emergency() {
 
   let intervalId: any;
   const handlePressIn = () => {
-    setIsPressed(true);
-    intervalId = setInterval(() => {
-      setBorderColor((prevColor) => (prevColor === Colors.details ? Colors.red : Colors.details));
-    }, 350);
-    const id: any = setTimeout(async () => {
-      if (Location.PermissionStatus.GRANTED) {
-        clearInterval(intervalId);
-        setIsPressedFinished(true);
-
-        let location: any = await Location.getCurrentPositionAsync({});
-        let address: any = await Location.reverseGeocodeAsync(location.coords);
-        setAddress(address);
-        console.log(address);
-
-        showToastSuccess();
-      }
-      else {
-        showToastError();
-      }
-    }, 3000);
-    setTimeoutId(id);
+    try {
+      setIsPressed(true);
+      intervalId = setInterval(() => {
+        setBorderColor((prevColor) => (prevColor === Colors.details ? Colors.red : Colors.details));
+      }, 350);
+      const id: any = setTimeout(async () => {
+        if (Location.PermissionStatus.GRANTED) {
+          clearInterval(intervalId);
+          setIsPressedFinished(true);
+          
+          let location: any = await Location.getCurrentPositionAsync({});
+          let address: any = await Location.reverseGeocodeAsync(location.coords);
+          setAddress(address);
+          console.log(address);
+          
+          showToastSuccess();
+        }
+        else {
+          showToastError();
+        }
+      }, 3000);
+      setTimeoutId(id);
+    }
+    catch (error) {
+      console.log(error);
+      showToastError();
+    }
   };
 
   const handlePressOut = () => {
