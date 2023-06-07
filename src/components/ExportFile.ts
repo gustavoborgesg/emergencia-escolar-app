@@ -1,20 +1,36 @@
 import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 
-export const exportFiles = async (text: string, uriArray: any[]) => {
+//Coleta informações da emergência e envia para o servidor
+export const exportEmergency = async (objeto: JSON) => {
+  try {
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+//Coleta informações da denúncia e envia para o servidor
+export const exportReport = async (text: string, uriArray: any[]) => {
   try {
     const formData = new FormData();
     // Adicionar String
     formData.append('information', text);
-
     for (let i = 0; i < uriArray.length; i++) {
+      console.log(uriArray[i]);
       const fileUri = uriArray[i];
       const fileContent = await FileSystem.readAsStringAsync(fileUri);
       const fileName = 'file' + (i + 1).toString();
 
+      const extensionIndex = fileUri.lastIndexOf('.');
+      let extension;
+      if (extensionIndex !== -1 && extensionIndex !== 0 && extensionIndex !== fileUri.length - 1) {
+        extension = fileUri.substring(extensionIndex);
+      }
+
       formData.append('files', {
         uri: fileUri,
-        name: fileName,
+        name: fileName + extension,
         type: 'multipart/form-data',
         data: fileContent,
       });

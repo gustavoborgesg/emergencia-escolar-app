@@ -1,15 +1,19 @@
 import { StyleSheet, View, Text, Keyboard, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/Colors';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import CustomTextInput from '../../components/CustomTextInput';
 import CustomButton from '../../components/CustomButton';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { exportFiles } from '../../components/ExportFile';
+import { exportReport } from '../../components/ExportFile';
 
 export default function Report() {
+
+  useEffect(() => {
+    clean();
+  }, []);
 
   const showToastSuccess = () => {
     Toast.show({
@@ -47,7 +51,7 @@ export default function Report() {
         {
           text: 'Confirmar',
           onPress: () => {
-            exportFiles(bodyText, uriArray);
+            exportReport(bodyText, uriArray);
           },
         },
         {
@@ -61,7 +65,6 @@ export default function Report() {
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-
     if (!bodyText && !file && !imagesAndVideos) {
       setError("Nenhuma informação inserida!")
       isValid = false;
@@ -72,7 +75,7 @@ export default function Report() {
     }
   }
 
-  const [uriArray, setUriArray]: any = useState([]);
+  const [uriArray, setUriArray] = useState<string[]>([]);
 
   const selectImagesAndVideos = async () => {
     try {
@@ -84,8 +87,8 @@ export default function Report() {
       });
       if (!result.canceled) {
         setImagesAndVideos(result.assets);
-        result.assets?.forEach((asset: { uri: any; }) => {
-          setUriArray([...uriArray, asset.uri]);          
+        result.assets?.forEach(async (asset: { uri: any; }) => {
+          await setUriArray(prevArray => [...prevArray, asset.uri]);
         });
       }
     } catch (error) {
@@ -95,10 +98,10 @@ export default function Report() {
 
   const selectFile = async () => {
     try {
-      const file = await DocumentPicker.getDocumentAsync({});
+      const file = await DocumentPicker.getDocumentAsync({ type: '*/*' });
       if (file.type === 'success') {
         setFile(file);
-        await setUriArray([...uriArray, file.uri]);
+        await setUriArray(prevArray => [...prevArray, file.uri]);
       }
     } catch (error) {
       console.log(error);
@@ -110,6 +113,7 @@ export default function Report() {
     setBodyText("");
     setFile(null);
     setError("")
+    setUriArray([]);
   }
 
   return (
