@@ -115,7 +115,8 @@ export default function Report() {
           <Text style={styles.Subtitle}>Insira toda informação que possam ser relevantes...</Text>
           <View style={styles.Form}>
             <CustomTextInput
-              placeholder={"Informações..."}
+              placeholder={"Informações... (Limite: 1000 caracteres)"}
+              maxLength={1000}
               value={bodyText}
               error={error}
               onChangeText={(text: any) => handleOnChange(text)}
@@ -123,18 +124,24 @@ export default function Report() {
               returnKeyType="next"
             />
             <View style={{ flex: 1, justifyContent: "center", marginBottom: 30, gap: 30 }}>
-              <CustomButton
-                text={imagesAndVideos == null ? "Selecionar Imagens e Vídeos" : imagesAndVideos.length === 1 ? imagesAndVideos.length + " Arquivo Selecionado" : imagesAndVideos.length + " Arquivos Selecionados"}
-                textColor={Colors.primary}
-                backgroundColor={Colors.white}
-                onPress={() => selectImagesAndVideos()}
-              />
-              <CustomButton
-                text={file == null ? "Selecionar Arquivo" : file.name.length >= 20 ? file.name.substring(0, 17).concat("...") : file.name}
-                textColor={Colors.primary}
-                backgroundColor={Colors.white}
-                onPress={() => selectFile()}
-              />
+              <View>
+                <CustomButton
+                  text={imagesAndVideos == null ? "Selecionar Imagens e Vídeos" : imagesAndVideos.length === 1 ? imagesAndVideos.length + " Arquivo Selecionado" : imagesAndVideos.length + " Arquivos Selecionados"}
+                  textColor={Colors.primary}
+                  backgroundColor={Colors.white}
+                  onPress={() => selectImagesAndVideos()}
+                />
+                <Text style={styles.Text}>Limite: 10 fotos/vídeos (.mp4, png, jpg...)</Text>
+              </View>
+              <View>
+                <CustomButton
+                  text={file == null ? "Selecionar Arquivo" : file.name.length >= 20 ? file.name.substring(0, 17).concat("...") : file.name}
+                  textColor={Colors.primary}
+                  backgroundColor={Colors.white}
+                  onPress={() => selectFile()}
+                />
+                <Text style={styles.Text}>Limite: 1 arquivo (qualquer extensão)</Text>
+              </View>
             </View>
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", width: "80%" }}>
               <CustomButton
@@ -188,5 +195,10 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 10,
     borderColor: Colors.red,
+  },
+  Text: {
+    color: "#000",
+    fontSize: 14,
+    paddingTop: 3,
   },
 });
