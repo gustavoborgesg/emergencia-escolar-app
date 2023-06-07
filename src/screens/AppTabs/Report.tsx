@@ -7,6 +7,7 @@ import CustomTextInput from '../../components/CustomTextInput';
 import CustomButton from '../../components/CustomButton';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
+import { exportFiles } from '../../components/ExportFile';
 
 export default function Report() {
 
@@ -46,7 +47,7 @@ export default function Report() {
         {
           text: 'Confirmar',
           onPress: () => {
-            //mandar para servidor
+            exportFiles(bodyText, uriArray);
           },
         },
         {
@@ -71,6 +72,8 @@ export default function Report() {
     }
   }
 
+  const [uriArray, setUriArray]: any = useState([]);
+
   const selectImagesAndVideos = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -79,8 +82,12 @@ export default function Report() {
         orderedSelection: true,
         selectionLimit: 10,
       });
-      setImagesAndVideos(result.assets);
-      console.log(imagesAndVideos)
+      if (!result.canceled) {
+        setImagesAndVideos(result.assets);
+        result.assets?.forEach((asset: { uri: any; }) => {
+          setUriArray([...uriArray, asset.uri]);
+        });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -91,10 +98,9 @@ export default function Report() {
       const file = await DocumentPicker.getDocumentAsync({});
       if (file.type === 'success') {
         setFile(file);
+        await setUriArray([...uriArray, file.uri]);
       }
-      console.log(file);
     } catch (error) {
-      setFile(null);
       console.log(error);
     }
   }
