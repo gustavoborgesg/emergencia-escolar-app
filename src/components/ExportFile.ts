@@ -4,26 +4,24 @@ import axios from 'axios';
 export const exportFiles = async (text: string, uriArray: any[]) => {
   try {
     const formData = new FormData();
+    // Adicionar String
+    formData.append('information', text);
 
-    //Adicionar String
-    formData.append('text', text);
-
-    let cont = 0;
-    // Adicionar cada arquivo ao objeto FormData
-    uriArray.forEach(async (fileUri: any) => {
-      // Ler o conteúdo do arquivo como uma string
+    for (let i = 0; i < uriArray.length; i++) {
+      const fileUri = uriArray[i];
       const fileContent = await FileSystem.readAsStringAsync(fileUri);
-      cont += 1;
+      const fileName = 'file' + (i + 1).toString();
+
       formData.append('files', {
         uri: fileUri,
-        name: 'file' + cont.toString,
+        name: fileName,
         type: 'multipart/form-data',
         data: fileContent,
       });
-    });
+    }
 
     // Envie os arquivos para o servidor usando uma chamada de API
-    const response = await axios.post('http://?', formData, {
+    const response = await axios.post('http://192.168.0.2:8080/report', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

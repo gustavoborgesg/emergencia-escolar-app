@@ -85,7 +85,7 @@ export default function Report() {
       if (!result.canceled) {
         setImagesAndVideos(result.assets);
         result.assets?.forEach((asset: { uri: any; }) => {
-          setUriArray([...uriArray, asset.uri]);
+          setUriArray([...uriArray, asset.uri]);          
         });
       }
     } catch (error) {
