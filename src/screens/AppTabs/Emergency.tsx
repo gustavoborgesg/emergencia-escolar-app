@@ -61,8 +61,8 @@ export default function Emergency() {
 
           let location: any = await Location.getCurrentPositionAsync({});
           let address: any = await Location.reverseGeocodeAsync(location.coords);
-          setAddress(address);
-          exportEmergency(address);
+          setAddress(address);          
+          exportEmergency(location.coords, address);          
           showToastSuccess();
         }
         else {
