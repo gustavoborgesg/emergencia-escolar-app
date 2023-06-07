@@ -2,9 +2,11 @@ import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 
 //Coleta informações da emergência e envia para o servidor
-export const exportEmergency = async (objeto: JSON) => {
+export const exportEmergency = async (jsonObject: JSON) => {
   try {
+    const response = await axios.post('http://192.168.0.2:8080/emergency', jsonObject);
 
+    console.log(response.data);
   } catch (error) {
     console.error(error);
   }

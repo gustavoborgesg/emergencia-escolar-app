@@ -5,6 +5,7 @@ import Colors from '../../../assets/colors/Colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import Toast from 'react-native-toast-message';
 import * as Location from 'expo-location';
+import { exportEmergency } from '../../components/ExportFile';
 
 export default function Emergency() {
 
@@ -61,8 +62,7 @@ export default function Emergency() {
           let location: any = await Location.getCurrentPositionAsync({});
           let address: any = await Location.reverseGeocodeAsync(location.coords);
           setAddress(address);
-          console.log(address);
-
+          exportEmergency(address);
           showToastSuccess();
         }
         else {
