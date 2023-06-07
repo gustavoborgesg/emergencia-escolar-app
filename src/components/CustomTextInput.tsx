@@ -3,13 +3,12 @@ import { useRef } from 'react';
 import { View, Text, TextInput, StyleSheet, Platform } from 'react-native';
 import Colors from '../../assets/colors/Colors';
 
-const CustomTextInput = ({ label, error, onFocus = () => { }, inputRef, ...props }: any) => {
+const CustomTextInput = ({ error, onFocus = () => { }, inputRef, ...props }: any) => {
 
   const [isFocus, setIsFocus] = useState(false);
 
   return (
     <View style={{ height: "100%", flex: 1 }}>
-      <Text style={styles.Label}>{label}</Text>
       <View
         style={[
           styles.InputContainer,
@@ -46,12 +45,6 @@ const CustomTextInput = ({ label, error, onFocus = () => { }, inputRef, ...props
 export default CustomTextInput;
 
 const styles = StyleSheet.create({
-  Label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: Colors.black,
-    marginBottom: 5,
-  },
   InputContainer: {
     flex: 1,
     alignItems: 'center',
@@ -60,7 +53,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderWidth: 1,
     borderRadius: 5,
-    height: "100%",
+    //height: "100%",
   },
   InputText: {
     color: Colors.black,
@@ -70,8 +63,8 @@ const styles = StyleSheet.create({
   },
   ErrorText: {
     fontWeight: "bold",
-    marginTop: 2,
-    fontSize: 12,
+    paddingTop: 4,
+    fontSize: 14,
     alignSelf: "flex-end",
     color: "red",
   }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/Colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons'

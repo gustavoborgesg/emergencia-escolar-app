@@ -32,6 +32,12 @@
         {
           "iCloudContainerEnvironment": "Production"
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O aplicativo precisa de acesso à suas fotos para poder enviar elas numa denuncia."
+        }
       ]
     ]
   }

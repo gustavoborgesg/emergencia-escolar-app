@@ -1,37 +1,20 @@
-import { SafeAreaView, StyleSheet, View, Text, TouchableOpacity, TextInput, Keyboard, ScrollView } from 'react-native';
-import GlobalStyles from '../../../assets/styles/GlobalStyles';
+import { StyleSheet, View, Text, Keyboard, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 import Header from '../../components/Header';
 import Colors from '../../../assets/colors/Colors';
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Toast from 'react-native-toast-message';
-import * as Location from 'expo-location';
 import CustomTextInput from '../../components/CustomTextInput';
 import CustomButton from '../../components/CustomButton';
 import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Report() {
-
-  const [address, setAddress]: any = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-
-      if (status !== 'granted') {
-        showToastError
-        return;
-      }
-
-      await Location.enableNetworkProviderAsync();
-    })();
-  }, []);
 
   const showToastSuccess = () => {
     Toast.show({
       type: 'success',
-      text1: 'Pedido de Emergência',
-      text2: 'Chamado de emergência enviado às autoridades...',
+      text1: 'Denúncia Realizada',
+      text2: 'Denúncia enviada às autoridades locais...',
       visibilityTime: 6000,
     });
   }
@@ -45,150 +28,132 @@ export default function Report() {
     });
   }
 
-  const [timeoutId, setTimeoutId]: any = useState(null);
-  const [isPressed, setIsPressed] = useState(false);
-  const [isPressedFinished, setIsPressedFinished] = useState(false);
-  const [borderColor, setBorderColor] = useState(Colors.details);
-
-  let intervalId: any;
-  const handlePressIn = () => {
-    try {
-      setIsPressed(true);
-      intervalId = setInterval(() => {
-        setBorderColor((prevColor) => (prevColor === Colors.details ? Colors.red : Colors.details));
-      }, 350);
-      const id: any = setTimeout(async () => {
-        if (Location.PermissionStatus.GRANTED) {
-          clearInterval(intervalId);
-          setIsPressedFinished(true);
-
-          let location: any = await Location.getCurrentPositionAsync({});
-          let address: any = await Location.reverseGeocodeAsync(location.coords);
-          setAddress(address);
-          console.log(address);
-
-          showToastSuccess();
-        }
-        else {
-          showToastError();
-        }
-      }, 3000);
-      setTimeoutId(id);
-    }
-    catch (error) {
-      console.log(error);
-      showToastError();
-    }
-  };
-
-  const handlePressOut = () => {
-    setIsPressed(false);
-    setIsPressedFinished(false);
-    clearTimeout(timeoutId);
-    clearInterval(intervalId);
-  };
-
-  const [errors, setErrors] = useState({
-    bodyText: "",
-    files: "",
-  });
-
-  const handleError = (error: any, input: any) => {
-    setErrors(prevState => ({ ...prevState, [input]: error }));
-  };
+  const [error, setError] = useState("");
 
   const [bodyText, setBodyText] = useState("");
-  const [files, setFiles]: any = useState(null);
+  const [file, setFile]: any = useState(null);
+  const [imagesAndVideos, setImagesAndVideos]: any = useState(null);
 
   const handleOnChange = (text: any) => {
     setBodyText(text);
+  };
+
+  const handleConfirmSend = () => {
+    Alert.alert(
+      'CONFIRMAÇÃO',
+      'Você tem certeza que deseja enviar a denúncia?',
+      [
+        {
+          text: 'Confirmar',
+          onPress: () => {
+            //mandar para servidor
+          },
+        },
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+      ],
+    );
   };
 
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
 
-    if (!bodyText) {
-      handleError('Campo obrigatório', 'bodyText');
-      isValid = false;
-    }
-
-    if (!files) {
-      handleError('Campo obrigatório', 'files');
+    if (!bodyText && !file && !imagesAndVideos) {
+      setError("Nenhuma informação inserida!")
       isValid = false;
     }
 
     if (isValid) {
-      //manda para o servidor
+      handleConfirmSend();
     }
   }
 
-  const selectFiles = async () => {
+  const selectImagesAndVideos = async () => {
     try {
-      const files = await DocumentPicker.getDocumentAsync({});
-      setFiles(files);
-      console.log(files);
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsMultipleSelection: true,
+        orderedSelection: true,
+        selectionLimit: 10,
+      });
+      setImagesAndVideos(result.assets);
+      console.log(imagesAndVideos)
     } catch (error) {
       console.log(error);
     }
   }
 
+  const selectFile = async () => {
+    try {
+      const file = await DocumentPicker.getDocumentAsync({});
+      if (file.type === 'success') {
+        setFile(file);
+      }
+      console.log(file);
+    } catch (error) {
+      setFile(null);
+      console.log(error);
+    }
+  }
+
   const clean = () => {
+    setImagesAndVideos(null);
     setBodyText("");
-    setFiles(null);
+    setFile(null);
+    setError("")
   }
 
   return (
     <ScrollView contentContainerStyle={styles.Main}>
-      <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
-        <Header />
-        <Text style={styles.Title}>REALIZAR DENÚNCIA</Text>
-        <Text style={styles.Subtitle}>Insira toda informação que possam ser relevantes...</Text>
-        <View style={styles.Form}>
-          <CustomTextInput
-            label={"Texto"}
-            placeholder={"Informações..."}
-            value={bodyText}
-            error={errors.bodyText}
-            onChangeText={(text: any) => handleOnChange(text)}
-            onFocus={() => handleError(null, 'bodyText')}
-            returnKeyType="next"
-          />
-          <CustomButton
-            text={files == null ? "Selecionar Arquivo 1" : files.name.length >= 20 ? files.name.substring(0, 17).concat("...") : files.name}
-            textColor={Colors.primary}
-            backgroundColor={Colors.white}
-            onPress={() => selectFiles()}
-          />
-          <CustomButton
-            text={files == null ? "Selecionar Arquivo 2" : files.name.length >= 20 ? files.name.substring(0, 17).concat("...") : files.name}
-            textColor={Colors.primary}
-            backgroundColor={Colors.white}
-            onPress={() => selectFiles()}
-          />
-          <CustomButton
-            text={files == null ? "Selecionar Arquivo 3" : files.name.length >= 20 ? files.name.substring(0, 17).concat("...") : files.name}
-            textColor={Colors.primary}
-            backgroundColor={Colors.white}
-            onPress={() => selectFiles()}
-          />
-          <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", width: "80%" }}>
-            <CustomButton
-              text={"Enviar"}
-              textColor={Colors.green}
-              backgroundColor={Colors.white}
-              onPress={() => validate()}
+      <KeyboardAvoidingView style={{ alignItems: "center", width: "100%", height: "100%" }} behavior='height'>
+        <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
+          <Header />
+          <Text style={styles.Title}>REALIZAR DENÚNCIA</Text>
+          <Text style={styles.Subtitle}>Insira toda informação que possam ser relevantes...</Text>
+          <View style={styles.Form}>
+            <CustomTextInput
+              placeholder={"Informações..."}
+              value={bodyText}
+              error={error}
+              onChangeText={(text: any) => handleOnChange(text)}
+              onFocus={() => setError("")}
+              returnKeyType="next"
             />
-            <CustomButton
-              text={"Limpar"}
-              textColor={Colors.red}
-              backgroundColor={Colors.white}
-              onPress={() => clean()}
-            />
+            <View style={{ flex: 1, justifyContent: "center", marginBottom: 30, gap: 30 }}>
+              <CustomButton
+                text={imagesAndVideos == null ? "Selecionar Imagens e Vídeos" : imagesAndVideos.length === 1 ? imagesAndVideos.length + " Arquivo Selecionado" : imagesAndVideos.length + " Arquivos Selecionados"}
+                textColor={Colors.primary}
+                backgroundColor={Colors.white}
+                onPress={() => selectImagesAndVideos()}
+              />
+              <CustomButton
+                text={file == null ? "Selecionar Arquivo" : file.name.length >= 20 ? file.name.substring(0, 17).concat("...") : file.name}
+                textColor={Colors.primary}
+                backgroundColor={Colors.white}
+                onPress={() => selectFile()}
+              />
+            </View>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", width: "80%" }}>
+              <CustomButton
+                text={"Enviar"}
+                textColor={Colors.green}
+                backgroundColor={Colors.white}
+                onPress={() => validate()}
+              />
+              <CustomButton
+                text={"Limpar"}
+                textColor={Colors.red}
+                backgroundColor={Colors.white}
+                onPress={() => clean()}
+              />
+            </View>
+            <Text style={styles.Warning}>Utilize apenas em casos reais de suspeita!</Text>
           </View>
-          <Text style={styles.Warning}>Utilize apenas em casos reais de suspeita!</Text>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </ScrollView>
   );
 }
@@ -204,7 +169,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     alignItems: "center",
-    //justifyContent: "center",
+    marginTop: 30,
   },
   Title: {
     fontSize: 28,
@@ -220,28 +185,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.red,
     fontWeight: "bold",
-    paddingTop: 20,
+    paddingTop: 30,
+    paddingBottom: 10,
     borderColor: Colors.red,
-  },
-  Text: {
-    width: "100%",
-    color: "#000",
-    fontSize: 30,
-  },
-  EmergencyButton: {
-    alignItems: "center",
-    justifyContent: 'center',
-    backgroundColor: "#fff",
-    height: 300,
-    width: 300,
-    borderColor: "#d6d6d6",
-    borderWidth: 5,
-    borderRadius: 300,
-    overflow: 'hidden'
-  },
-  EmergencyText: {
-    color: Colors.red,
-    fontSize: 40,
-    fontWeight: "bold",
   },
 });
