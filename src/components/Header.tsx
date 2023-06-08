@@ -32,13 +32,13 @@ export default function Header() {
               * Celular: (64) 9 9923-2114{'\n'}{'\n'}
 
               - Hugo Francisco Medeiros Barreto{'\n'}
-              * Celular: (64) 9 9923-2114{'\n'}{'\n'}
+              * Celular: (64) 9 8439-4045{'\n'}{'\n'}
 
               - Letícia Carvalho Clemente{'\n'}
-              * Celular: (64) 9 9923-2114{'\n'}{'\n'}
+              * Celular: (64) 9 9240-6218{'\n'}{'\n'}
 
               - Luciano Ferreira de Carvalho Neto{'\n'}
-              * Celular: (64) 9 9923-2114
+              * Celular: (64) 9 9916-3574
             </Text>
 
             <TouchableOpacity style={styles.ModalCloseButton} onPress={toggleModal} >
