@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native';
-import Header from '../../components/Header';
+import Modal from "react-native-modal";
 
-export default function About() {
+export default function About(isVisible: any) {
   return (
     <View style={styles.Main}>
-      <Header />
-      <Text style={styles.Text}>Botão de emergência</Text>
+      <Modal isVisible={isVisible}>
+        <View style={{ flex: 1 }}>
+          <Text>I am the modal content!</Text>
+        </View>
+      </Modal>
     </View>
   );
 }

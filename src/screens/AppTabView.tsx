@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { View, useWindowDimensions, Text, Image } from 'react-native';
+import { useWindowDimensions, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Emergency from './AppTabs/Emergency';
 import Report from './AppTabs/Report';
 import Protocols from './AppTabs/Protocols';
-import About from './AppTabs/About';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Colors from '../../assets/colors/Colors';
