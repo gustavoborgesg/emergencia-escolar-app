@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import Toast from 'react-native-toast-message';
 import * as Location from 'expo-location';
 import { exportEmergency } from '../../components/ExportFile';
+import EmergencyButton from '../../components/Buttons/EmergencyButton';
 
 export default function Emergency() {
 
@@ -14,31 +15,38 @@ export default function Emergency() {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-
       if (status !== 'granted') {
-        showToastError
+        showToastPermissionDenied();
         return;
       }
-
       await Location.enableNetworkProviderAsync();
     })();
   }, []);
 
-  const showToastSuccess = () => {
+  const showToastEmergencySent = () => {
     Toast.show({
       type: 'success',
       text1: 'Pedido de Emergência',
       text2: 'Chamado de emergência enviado às autoridades...',
-      visibilityTime: 6000,
+      visibilityTime: 5000,
     });
   }
 
-  const showToastError = () => {
+  const showToastEmergencyError = (error: unknown) => {
+    Toast.show({
+      type: 'error',
+      text1: 'Falha ao enviar pedido de emergência',
+      text2: 'Não foi possível enviar o pedido de emergência devido ao erro: ' + "\n" + error,
+      visibilityTime: 5000,
+    });
+  }
+
+  const showToastPermissionDenied = () => {
     Toast.show({
       type: 'error',
       text1: 'Falha ao obter localização',
       text2: 'Favor permitir o acesso à sua localização para conseguir utilizar o app...',
-      visibilityTime: 6000,
+      visibilityTime: 5000,
     });
   }
 
@@ -63,17 +71,16 @@ export default function Emergency() {
           let address: any = await Location.reverseGeocodeAsync(location.coords);
           setAddress(address);
           exportEmergency(address);
-          showToastSuccess();
+          showToastEmergencySent();
         }
         else {
-          showToastError();
+          showToastPermissionDenied();
         }
       }, 3000);
       setTimeoutId(id);
     }
     catch (error) {
-      console.log(error);
-      showToastError();
+      showToastEmergencyError(error);
     }
   };
 
@@ -90,15 +97,13 @@ export default function Emergency() {
       <Text style={styles.Title}>BOTÃO DE EMERGÊNCIA</Text>
       <Text style={styles.Subtitle}>Pressione e segure por 3 segundos para acionar...</Text>
       <View style={styles.Form}>
-        <TouchableOpacity
-          style={[styles.EmergencyButton, isPressed && { borderColor: borderColor }, isPressedFinished && { borderColor: Colors.primary }]}
-          activeOpacity={0.5}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-        >
-          <Text style={styles.EmergencyText}>EMERGÊNCIA</Text>
-          <MaterialCommunityIcons name="gesture-tap-hold" size={35} color="red" />
-        </TouchableOpacity>
+        <EmergencyButton
+          handlePressIn={() => handlePressIn()}
+          handlePressOut={() => handlePressOut()}
+          borderColor={borderColor}
+          isPressed={isPressed}
+          isPressedFinished={isPressedFinished}
+        />
         <Text style={styles.Warning}>Utilize apenas em casos reais de emergência escolar!</Text>
       </View>
     </ScrollView>
@@ -118,7 +123,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   Title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "bold",
     color: Colors.primary,
     marginTop: 10,
@@ -132,31 +137,11 @@ const styles = StyleSheet.create({
     color: Colors.red,
     fontWeight: "bold",
     paddingTop: 20,
-    //borderBottomWidth: 0.2,
     borderColor: Colors.red,
   },
   Text: {
     width: "100%",
     color: "#000",
     fontSize: 30,
-  },
-  EmergencyButton: {
-    alignItems: "center",
-    justifyContent: 'center',
-    backgroundColor: "#fff",
-    height: 300,
-    width: 300,
-    borderColor: "#d6d6d6",
-    borderWidth: 5,
-    borderRadius: 300,
-    overflow: 'hidden'
-  },
-  PressedEmergencyButton: {
-    borderColor: Colors.red,
-  },
-  EmergencyText: {
-    color: Colors.red,
-    fontSize: 40,
-    fontWeight: "bold",
   },
 });

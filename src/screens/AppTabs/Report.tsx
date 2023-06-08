@@ -15,7 +15,7 @@ export default function Report() {
     clean();
   }, []);
 
-  const showToastSuccess = () => {
+  const showToastReportSuccess = () => {
     Toast.show({
       type: 'success',
       text1: 'Denúncia Realizada',
@@ -24,20 +24,30 @@ export default function Report() {
     });
   }
 
-  const showToastError = () => {
+  const showToastReportCanceled = () => {
     Toast.show({
       type: 'error',
-      text1: 'Falha ao obter localização',
-      text2: 'Favor permitir o acesso à sua localização para conseguir utilizar o app...',
-      visibilityTime: 6000,
+      text1: 'Denúncia Cancelada',
+      text2: 'A denúncia foi cancelada...',
+      visibilityTime: 5000,
     });
   }
 
-  const [error, setError] = useState("");
+  const showToastReportError = (error: unknown) => {
+    Toast.show({
+      type: 'error',
+      text1: 'Denúncia não Realizada',
+      text2: 'A denúncia não foi realizada devido ao erro: ' + "\n" + error,
+      visibilityTime: 5000,
+    });
+  }
 
   const [bodyText, setBodyText] = useState("");
   const [file, setFile]: any = useState(null);
   const [imagesAndVideos, setImagesAndVideos]: any = useState(null);
+  const [error, setError] = useState("");
+
+  const [uriArray, setUriArray] = useState<string[]>([]);
 
   const handleOnChange = (text: any) => {
     setBodyText(text);
@@ -51,31 +61,24 @@ export default function Report() {
         {
           text: 'Confirmar',
           onPress: () => {
-            exportReport(bodyText, uriArray);
+            try {
+              exportReport(bodyText, uriArray);
+              showToastReportSuccess();
+            } catch (error) {
+              showToastReportError(error);
+            }
           },
         },
         {
           text: 'Cancelar',
           style: 'cancel',
+          onPress: () => {
+            showToastReportCanceled();
+          }
         },
       ],
     );
   };
-
-  const validate = () => {
-    Keyboard.dismiss();
-    let isValid = true;
-    if (!bodyText && !file && !imagesAndVideos) {
-      setError("Nenhuma informação inserida!")
-      isValid = false;
-    }
-
-    if (isValid) {
-      handleConfirmSend();
-    }
-  }
-
-  const [uriArray, setUriArray] = useState<string[]>([]);
 
   const selectImagesAndVideos = async () => {
     try {
@@ -105,6 +108,19 @@ export default function Report() {
       }
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  const validate = () => {
+    Keyboard.dismiss();
+    let isValid = true;
+    if (!bodyText && !file && !imagesAndVideos) {
+      setError("Nenhuma informação inserida!")
+      isValid = false;
+    }
+
+    if (isValid) {
+      handleConfirmSend();
     }
   }
 
@@ -189,7 +205,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   Title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "bold",
     color: Colors.primary,
     marginTop: 10,

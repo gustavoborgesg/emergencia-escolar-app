@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, Platform } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import Colors from '../../assets/colors/Colors';
 
 const CustomTextInput = ({ error, onFocus = () => { }, inputRef, ...props }: any) => {
@@ -53,7 +52,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderWidth: 1,
     borderRadius: 5,
-    //height: "100%",
   },
   InputText: {
     color: Colors.black,
