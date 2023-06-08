@@ -3,11 +3,11 @@ import Header from '../../components/Header';
 import Colors from '../../../assets/colors/Colors';
 import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
-import CustomTextInput from '../../components/CustomTextInput';
-import CustomButton from '../../components/CustomButton';
+import CustomTextInput from '../../components/Inputs/CustomTextInput';
+import CustomButton from '../../components/Buttons/CustomButton';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { exportReport } from '../../components/ExportFile';
+import { exportReport } from '../../utils/ExportFile';
 
 export default function Report() {
 
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.red,
   },
   Text: {
-    color: "#000",
+    color: Colors.black,
     fontSize: 14,
     paddingTop: 3,
   },

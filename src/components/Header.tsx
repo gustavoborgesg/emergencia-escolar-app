@@ -1,8 +1,7 @@
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../../assets/colors/Colors';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
-import About from '../screens/AppTabs/About';
 import Modal from "react-native-modal";
 
 export default function Header() {

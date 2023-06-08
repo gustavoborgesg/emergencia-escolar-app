@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
-import Colors from '../../assets/colors/Colors';
+import Colors from '../../../assets/colors/Colors';
 
 const CustomTextInput = ({ error, onFocus = () => { }, inputRef, ...props }: any) => {
 

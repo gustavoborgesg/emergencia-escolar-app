@@ -4,9 +4,9 @@ import Colors from '../../../assets/colors/Colors';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import image1 from '../../../assets/images/conteudo1.png'
-import image2 from '../../../assets/images/conteudo1.png'
-import image3 from '../../../assets/images/conteudo1.png'
-import image4 from '../../../assets/images/conteudo1.png'
+import image2 from '../../../assets/images/conteudo2.png'
+import image3 from '../../../assets/images/conteudo3.png'
+import image4 from '../../../assets/images/conteudo4.png'
 
 const SLIDER_WIDTH = Dimensions.get('window').width * 0.95;
 
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   Carousel: {
     width: SLIDER_WIDTH,
-    height: "90%",
+    height: "85%",
     backgroundColor: Colors.primary,
     marginTop: 25,
   },
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   Text: {
-    color: "#000",
+    color: Colors.black,
     fontSize: 20,
     fontWeight: "bold",
     paddingBottom: 15,
