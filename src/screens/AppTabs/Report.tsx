@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import CustomTextInput from '../../components/Inputs/CustomTextInput';
 import CustomButton from '../../components/Buttons/CustomButton';
-import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { exportReport } from '../../utils/ExportFile';
 
@@ -43,7 +42,6 @@ export default function Report() {
   }
 
   const [bodyText, setBodyText] = useState("");
-  const [file, setFile]: any = useState(null);
   const [imagesAndVideos, setImagesAndVideos]: any = useState(null);
   const [error, setError] = useState("");
 
@@ -99,22 +97,10 @@ export default function Report() {
     }
   }
 
-  const selectFile = async () => {
-    try {
-      const file = await DocumentPicker.getDocumentAsync({ type: '*/*' });
-      if (file.type === 'success') {
-        setFile(file);
-        await setUriArray(prevArray => [...prevArray, file.uri]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-    if (!bodyText && !file && !imagesAndVideos) {
+    if (!bodyText && !imagesAndVideos) {
       setError("Nenhuma informação inserida!")
       isValid = false;
     }
@@ -127,7 +113,6 @@ export default function Report() {
   const clean = () => {
     setImagesAndVideos(null);
     setBodyText("");
-    setFile(null);
     setError("")
     setUriArray([]);
   }
@@ -158,15 +143,6 @@ export default function Report() {
                   onPress={() => selectImagesAndVideos()}
                 />
                 <Text style={styles.Text}>Limite: 10 fotos/vídeos (.mp4, png, jpg...)</Text>
-              </View>
-              <View>
-                <CustomButton
-                  text={file == null ? "Selecionar Arquivo" : file.name.length >= 20 ? file.name.substring(0, 17).concat("...") : file.name}
-                  textColor={Colors.primary}
-                  backgroundColor={Colors.white}
-                  onPress={() => selectFile()}
-                />
-                <Text style={styles.Text}>Limite: 1 arquivo (qualquer extensão)</Text>
               </View>
             </View>
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", width: "80%" }}>
