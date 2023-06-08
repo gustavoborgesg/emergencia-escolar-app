@@ -70,7 +70,7 @@ export default function Emergency() {
           let location: any = await Location.getCurrentPositionAsync({});
           let address: any = await Location.reverseGeocodeAsync(location.coords);
           setAddress(address);
-          exportEmergency(address);
+          exportEmergency(location.coords, address);
           showToastEmergencySent();
         }
         else {
