@@ -17,8 +17,8 @@ export default function Report() {
   const showToastReportSuccess = () => {
     Toast.show({
       type: 'success',
-      text1: 'Denúncia Realizada',
-      text2: 'Denúncia enviada às autoridades locais...',
+      text1: 'Denúncia realizada',
+      text2: 'Denúncia enviada às autoridades locais',
       visibilityTime: 6000,
     });
   }
@@ -26,8 +26,8 @@ export default function Report() {
   const showToastReportCanceled = () => {
     Toast.show({
       type: 'error',
-      text1: 'Denúncia Cancelada',
-      text2: 'A denúncia foi cancelada...',
+      text1: 'Denúncia cancelada',
+      text2: 'A denúncia foi cancelada',
       visibilityTime: 5000,
     });
   }
@@ -35,7 +35,7 @@ export default function Report() {
   const showToastReportError = (error: unknown) => {
     Toast.show({
       type: 'error',
-      text1: 'Denúncia não Realizada',
+      text1: 'Denúncia não realizada',
       text2: 'A denúncia não foi realizada devido ao erro: ' + "\n" + error,
       visibilityTime: 5000,
     });
@@ -123,7 +123,7 @@ export default function Report() {
         <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
           <Header />
           <Text style={styles.Title}>REALIZAR DENÚNCIA</Text>
-          <Text style={styles.Subtitle}>Insira toda informação que possam ser relevantes...</Text>
+          <Text style={styles.Subtitle}>Insira as informações relevantes para realizar a denúncia</Text>
           <View style={styles.Form}>
             <CustomTextInput
               placeholder={"Informações... (Limite: 1000 caracteres)"}
@@ -142,7 +142,7 @@ export default function Report() {
                   backgroundColor={Colors.white}
                   onPress={() => selectImagesAndVideos()}
                 />
-                <Text style={styles.Text}>Limite: 10 fotos/vídeos (.mp4, png, jpg...)</Text>
+                <Text style={styles.Text}>Limite: 10 fotos/vídeos (.mp4, .png, .jpg, ...)</Text>
               </View>
             </View>
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", width: "80%" }}>
@@ -159,7 +159,7 @@ export default function Report() {
                 onPress={() => clean()}
               />
             </View>
-            <Text style={styles.Warning}>Utilize apenas em casos reais de suspeita!</Text>
+            <Text style={styles.Warning}>Use apenas em suspeitas reais!</Text>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     color: Colors.details,
   },
   Warning: {
-    fontSize: 15,
+    fontSize: 20,
     color: Colors.red,
     fontWeight: "bold",
     paddingTop: 30,

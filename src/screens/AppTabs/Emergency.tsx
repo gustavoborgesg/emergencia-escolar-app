@@ -25,7 +25,7 @@ export default function Emergency() {
   const showToastEmergencySent = () => {
     Toast.show({
       type: 'success',
-      text1: 'Pedido de Emergência',
+      text1: 'Pedido de emergência',
       text2: 'Chamado de emergência enviado às autoridades...',
       visibilityTime: 5000,
     });
@@ -44,7 +44,7 @@ export default function Emergency() {
     Toast.show({
       type: 'error',
       text1: 'Falha ao obter localização',
-      text2: 'Favor permitir o acesso à sua localização para conseguir utilizar o app...',
+      text2: 'Permita o acesso à sua localização para conseguir utilizar o aplicativo',
       visibilityTime: 5000,
     });
   }
@@ -95,7 +95,7 @@ export default function Emergency() {
     <ScrollView contentContainerStyle={styles.Main}>
       <Header />
       <Text style={styles.Title}>BOTÃO DE EMERGÊNCIA</Text>
-      <Text style={styles.Subtitle}>Pressione e segure por 3 segundos para acionar...</Text>
+      <Text style={styles.Subtitle}>Pressione e segure por 3 segundos para acionar</Text>
       <View style={styles.Form}>
         <EmergencyButton
           handlePressIn={() => handlePressIn()}
@@ -104,7 +104,7 @@ export default function Emergency() {
           isPressed={isPressed}
           isPressedFinished={isPressedFinished}
         />
-        <Text style={styles.Warning}>Utilize apenas em casos reais de emergência escolar!</Text>
+        <Text style={styles.Warning}>Use apenas em emergências reais!</Text>
       </View>
     </ScrollView>
   );
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     color: Colors.details,
   },
   Warning: {
-    fontSize: 15,
+    fontSize: 20,
     color: Colors.red,
     fontWeight: "bold",
     paddingTop: 20,

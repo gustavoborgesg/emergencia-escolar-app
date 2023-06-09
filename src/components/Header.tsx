@@ -21,11 +21,10 @@ export default function Header() {
           <Text style={styles.Title}>Sobre</Text>
           <View style={styles.Form}>
             <Text style={styles.Subtitle}>
-              O aplicativo Emergência Escolar foi desenvolvido como protótipo para o evento Hackathon 2023.
-              Seu objetivo é de agilizar o contato com a polícia durante emrgências, previnir atentados
-              facilitando o processo de denúncia voltados para o tópico e disponibilizar materiais para
-              auxiliar em eventuais emergências.</Text>
-            <Text style={styles.ModalText}>Equipe :</Text>
+              O aplicativo Emergência Escolar foi desenvolvido como um protótipo para o evento Hackathon Campus Party Goiás 2023.
+              Seu objetivo é agilizar o contato com a polícia em casos de emergência, prevenir atentados por meio de denúncias facilitadas e
+              disponibilizar recursos para auxiliar em situações críticas.</Text>
+            <Text style={styles.ModalText}>Equipe</Text>
             <Text style={styles.NameText}>
               - Gustavo Borges Guimarães{'\n'}
               * Celular: (64) 9 9923-2114{'\n'}{'\n'}

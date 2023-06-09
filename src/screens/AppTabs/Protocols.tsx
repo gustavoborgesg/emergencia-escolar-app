@@ -41,7 +41,7 @@ export default function Emergency() {
     <ScrollView contentContainerStyle={styles.Main}>
       <Header />
       <Text style={styles.Title}>PROTOCOLOS DE SEGURANÇA</Text>
-      <Text style={styles.Subtitle}>Materiais para auxilio numa eventual emergência...</Text>
+      <Text style={styles.Subtitle}>Materiais para auxílio em caso de emergência</Text>
       <View style={styles.Form}>
         <Carousel
           data={images}
@@ -50,7 +50,7 @@ export default function Emergency() {
           itemWidth={SLIDER_WIDTH}
           useScrollView={true}
         />
-        <Text style={styles.Text}>Para saber mais sobre o assunto acesse:</Text>
+        <Text style={styles.Text}>Para mais informações, acesse:</Text>
         <View style={{ gap: 20, marginBottom: 20 }}>
           <TouchableOpacity style={styles.ButtonLink} onPress={handleLink1}>
             <SimpleLineIcons name="globe" size={24} color={Colors.primary} />

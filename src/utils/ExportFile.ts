@@ -3,8 +3,8 @@ import axios from 'axios';
 
 //Coleta informações da emergência e envia para o servidor
 export const exportEmergency = async (coords: JSON, address: JSON) => {
-  
-  try {   
+
+  try {
     const response = await axios.post('https://emergencia-escolar-app-backend-production.up.railway.app/emergency', { "0": address, ...coords }, {
       headers: {
         'Content-Type': 'application/json'
