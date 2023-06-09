@@ -5,7 +5,7 @@ import axios from 'axios';
 export const exportEmergency = async (coords: JSON, address: JSON) => {
   
   try {   
-    const response = await axios.post('http://192.168.0.2:8080/emergency', { "0": address, ...coords }, {
+    const response = await axios.post('https://emergencia-escolar-app-backend-production.up.railway.app/emergency', { "0": address, ...coords }, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -44,7 +44,7 @@ export const exportReport = async (text: string, uriArray: any[]) => {
     }
 
     // Envie os arquivos para o servidor usando uma chamada de API
-    const response = await axios.post('http://192.168.0.2:8080/report', formData, {
+    const response = await axios.post('https://emergencia-escolar-app-backend-production.up.railway.app/report', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
