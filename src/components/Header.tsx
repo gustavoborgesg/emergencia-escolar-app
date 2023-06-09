@@ -1,8 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import Colors from '../../assets/colors/Colors';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import Modal from "react-native-modal";
+import icon from "../../assets/images/icon.png"
 
 export default function Header() {
 
@@ -14,8 +15,7 @@ export default function Header() {
 
   return (
     <View style={styles.Main}>
-      <Text style={styles.HeaderText}>NomeApp/Icone</Text>
-
+      <Image style={{ maxWidth: 100, maxHeight: 30, }} source={icon} resizeMode={'contain'} />
       <Modal isVisible={isModalVisible} onBackdropPress={() => setModalVisible(false)} >
         <View style={styles.Modal}>
           <Text style={styles.Title}>Sobre</Text>
